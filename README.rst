@@ -46,12 +46,16 @@ Supported django CMS versions:
 Usage
 =====
 
-#. Configure django-multisite as documented
+#. Configure django-multisite as documented upstream
 
-#. Add ``djangocms_multisite`` to ``INSTALLED_APPS``::
+#. Use ``SITE_ID = SiteId(default=1)`` instead of the documented ``SITE_ID = SiteID()``
+
+
+#. Add ``multisite``, ``djangocms_multisite`` to ``INSTALLED_APPS``::
 
     INSTALLED_APPS=[
         ...
+        'multisite',
         'djangocms_multisite',
         ...
     ]
