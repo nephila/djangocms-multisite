@@ -81,6 +81,8 @@ Usage
         'www.example2.com': ('alias1.example2.com', 'alias2.example2.com',),
     },
     MULTISITE_CMS_FALLBACK='www.example.com'
+    
+#. Run ``python manage.py migrate``
 
 
 Settings
