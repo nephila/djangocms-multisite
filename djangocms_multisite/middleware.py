@@ -10,11 +10,8 @@ from django.utils.six.moves import urllib_parse as urlparse
 class CMSMultiSiteMiddleware(object):
     def process_request(self, request):
         try:
-            full_host = '{scheme}://{host}'.format(
-                scheme=request.scheme, host=request.META['HTTP_HOST']
-            )
-            parsed = urlparse.urlparse(full_host)
-            host = parsed.hostname
+            parsed = urlparse.urlparse(request.build_absolute_uri())
+            host = parsed.hostname.split(':')[0]
             urlconf = None
             try:
                 urlconf = settings.MULTISITE_CMS_URLS[host]
