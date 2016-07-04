@@ -60,12 +60,15 @@ Usage
         ...
     ]
 
-#. Add ``djangocms_multisite.middleware.CMSMultiSiteMiddleware`` to ``MIDDLEWARE_CLASSES`` after
-   ``django-multisite`` middleware::
+#. Add ``multisite.middleware.DynamicSiteMiddleware`` and ``djangocms_multisite.middleware.CMSMultiSiteMiddleware``
+   to ``MIDDLEWARE_CLASSES``; ``multisite.middleware.DynamicSiteMiddleware`` must be applied before
+   ``cms.middleware.utils.ApphookReloadMiddleware``, while ``djangocms_multisite.middleware.CMSMultiSiteMiddleware``
+   must right after that::
 
     MIDDLEWARE_CLASSES = [
         ...
         'multisite.middleware.DynamicSiteMiddleware',
+        'cms.middleware.utils.ApphookReloadMiddleware',
         'djangocms_multisite.middleware.CMSMultiSiteMiddleware',
         ...
     ]
@@ -81,7 +84,7 @@ Usage
         'www.example2.com': ('alias1.example2.com', 'alias2.example2.com',),
     },
     MULTISITE_CMS_FALLBACK='www.example.com'
-    
+
 #. Run ``python manage.py migrate``
 
 
