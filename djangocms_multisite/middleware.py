@@ -41,8 +41,7 @@ class CMSMultiSiteMiddleware(object):
             set_urlconf(None)
 
     def process_response(self, request, response):
-        if getattr(request, 'urlconf', None):
-            patch_vary_headers(response, ('Host',))
+        patch_vary_headers(response, ('Host',))
         # set back to default urlconf
         set_urlconf(None)
         return response
