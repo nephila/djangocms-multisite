@@ -48,7 +48,7 @@ Usage
 
 #. Configure django-multisite as documented upstream
 
-#. Use ``SITE_ID = SiteId(default=1)`` instead of the documented ``SITE_ID = SiteID()``
+#. Use ``SITE_ID = SiteID(default=1)`` instead of the documented ``SITE_ID = SiteID()``
 
 
 #. Add ``multisite``, ``djangocms_multisite`` to ``INSTALLED_APPS``::
