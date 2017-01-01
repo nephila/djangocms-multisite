@@ -14,7 +14,7 @@ HELPER_SETTINGS = dict(
     ROOT_URLCONF='tests.test_utils.urls1',
     INSTALLED_APPS=[
         'multisite',
-        'djangocms_text_ckeditor'
+        'djangocms_text_ckeditor',
     ],
     LANGUAGE_CODE='en',
     LANGUAGES=(
@@ -56,8 +56,33 @@ HELPER_SETTINGS = dict(
         'www.example.com': ('alias1.example.com', 'alias2.example.com',),
         'www.example2.com': ('alias1.example2.com', 'alias2.example2.com',),
     },
-    MULTISITE_CMS_FALLBACK='www.example.com'
+    MULTISITE_CMS_FALLBACK='www.example.com',
+    ALLOWED_HOSTS=['*'],
 )
+
+try:
+    import djangocms_blog
+    HELPER_SETTINGS['INSTALLED_APPS'].extend([
+        'filer',
+        'easy_thumbnails',
+        'aldryn_apphooks_config',
+        'cmsplugin_filer_image',
+        'parler',
+        'taggit',
+        'taggit_autosuggest',
+        'meta',
+        'djangocms_blog',
+    ])
+    HELPER_SETTINGS['THUMBNAIL_PROCESSORS'] = (
+        'easy_thumbnails.processors.colorspace',
+        'easy_thumbnails.processors.autocrop',
+        'filer.thumbnail_processors.scale_and_crop_with_subject_location',
+        'easy_thumbnails.processors.filters',
+    )
+    HELPER_SETTINGS['META_SITE_PROTOCOL'] = 'http'
+    HELPER_SETTINGS['META_USE_SITES'] = True
+except ImportError:
+    pass
 
 
 def run():
