@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
 
+from cms.utils.apphook_reload import reload_urlconf
 from django.conf import settings
 from django.core.urlresolvers import set_urlconf
 from django.utils.cache import patch_vary_headers
@@ -36,6 +37,11 @@ class CMSMultiSiteMiddleware(object):
             # about the request (e.g MyModel.get_absolute_url()) get the correct
             # urlconf.
             set_urlconf(urlconf)
+            try:
+                # In django CMS 3.4.2 this allows us to sae a few queries thanks to per-site appresolvers caching
+                reload_urlconf(clear_cache=False)
+            except TypeError:
+                reload_urlconf()
         except KeyError:
             # use default urlconf (settings.ROOT_URLCONF)
             set_urlconf(None)
