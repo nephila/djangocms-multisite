@@ -20,6 +20,12 @@ urlpatterns = [
     url(r'^jsi18n/(?P<packages>\S+?)/$', javascript_catalog),
 ]
 
+try:
+    import taggit_autosuggest
+    urlpatterns.append(url(r'^taggit_autosuggest/', include('taggit_autosuggest.urls')))
+except ImportError:
+    pass
+
 urlpatterns += staticfiles_urlpatterns()
 
 urlpatterns += i18n_patterns(
