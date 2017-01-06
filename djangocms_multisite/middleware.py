@@ -38,7 +38,7 @@ class CMSMultiSiteMiddleware(object):
             # urlconf.
             set_urlconf(urlconf)
             try:
-                # In django CMS 3.4.2 this allows us to sae a few queries thanks to per-site appresolvers caching
+                # In django CMS 3.4.2 this allows us to save a few queries thanks to per-site appresolvers caching
                 reload_urlconf(clear_cache=False)
             except TypeError:
                 reload_urlconf()
