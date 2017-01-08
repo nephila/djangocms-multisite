@@ -1,1 +1,1 @@
--e .
+django-multisite==1.2.5
