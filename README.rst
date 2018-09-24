@@ -27,6 +27,8 @@ djangocms-multisite
     :alt: Test coverage
 
 django-multisite support for django CMS
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+=======================================
 
 Supported Django versions:
 
@@ -41,13 +43,13 @@ Supported django CMS versions:
 * django CMS 3.*
 
 Assumptions
-=====
+===========
 
 #. A virtualenv up and runnign
 #. DjangoCMS working
 
 Installation
-=====
+============
 
 ``pip install djangocms-multisite``
 
@@ -91,7 +93,7 @@ Usage
 
     * For other settings (cache, etc.) check the `django-multisite <https://github.com/ecometrica/django-multisite>`_ page
 
-#. Add ``multisite.middleware.DynamicSiteMiddleware`` and ``djangocms_multisite.middleware.CMSMultiSiteMiddleware`` to ``MIDDLEWARE_CLASSES``. The order is important: ``multisite.middleware.DynamicSiteMiddleware`` must be applied before ``cms.middleware.utils.ApphookReloadMiddleware``, while ``djangocms_multisite.middleware.CMSMultiSiteMiddleware`` must right after::
+#. Add ``multisite.middleware.DynamicSiteMiddleware`` and ``djangocms_multisite.middleware.CMSMultiSiteMiddleware`` to ``MIDDLEWARE_CLASSES``. The order is important: ``multisite.middleware.DynamicSiteMiddleware`` must be applied before ``cms.middleware.utils.ApphookReloadMiddleware``, while ``djangocms_multisite.middleware.CMSMultiSiteMiddleware`` must be right after::
 
     MIDDLEWARE_CLASSES = [
         ...
@@ -118,8 +120,8 @@ Usage
 #. Run ``python manage.py migrate`` to apply the `django-multisite <https://github.com/ecometrica/django-multisite>`_ migrations
 
 
-Settings
-========
+Settings explanation
+====================
 
 MULTISITE_CMS_URLS
 ^^^^^^^^^^^^^^^^^^
