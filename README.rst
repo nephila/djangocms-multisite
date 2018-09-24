@@ -100,7 +100,7 @@ Usage
     ``djangocms_multisite.middleware.CMSMultiSiteMiddleware``
     must right after::
 
-    ```
+
     MIDDLEWARE_CLASSES = [
         ...
         'multisite.middleware.DynamicSiteMiddleware',
@@ -108,7 +108,7 @@ Usage
         'djangocms_multisite.middleware.CMSMultiSiteMiddleware',
         ...
     ]
-    ```
+
 #. Configure the URL mapping as follows
     The `tests.test_utils.urls1` path can be the main urlconf file that you already have in your project.
     And it can be the same for all the domains if you need the same structure.::
