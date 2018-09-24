@@ -91,8 +91,7 @@ Usage
 
     * For other settings (cache, etc.) check the `django-multisite <https://github.com/ecometrica/django-multisite>`_ page
 
-#. Add ``multisite.middleware.DynamicSiteMiddleware`` and ``djangocms_multisite.middleware.CMSMultiSiteMiddleware`` to ``MIDDLEWARE_CLASSES``.
-The order is important: ``multisite.middleware.DynamicSiteMiddleware`` must be applied before ``cms.middleware.utils.ApphookReloadMiddleware``, while ``djangocms_multisite.middleware.CMSMultiSiteMiddleware`` must right after::
+#. Add ``multisite.middleware.DynamicSiteMiddleware`` and ``djangocms_multisite.middleware.CMSMultiSiteMiddleware`` to ``MIDDLEWARE_CLASSES``. The order is important: ``multisite.middleware.DynamicSiteMiddleware`` must be applied before ``cms.middleware.utils.ApphookReloadMiddleware``, while ``djangocms_multisite.middleware.CMSMultiSiteMiddleware`` must right after::
 
     MIDDLEWARE_CLASSES = [
         ...
@@ -102,9 +101,7 @@ The order is important: ``multisite.middleware.DynamicSiteMiddleware`` must be a
         ...
     ]
 
-#. Configure the URL mapping as follows
-The `tests.test_utils.urls1` path can be the main urlconf file that you already have in your project.
-And it can be the same for all the domains if you need the same structure.::
+#. Configure the URL mapping as follows. The `tests.test_utils.urls1` path can be the main urlconf file that you already have in your project. And it can be the same for all the domains if you need the same structure.::
 
     MULTISITE_CMS_URLS={
         'www.example.com': 'tests.test_utils.urls1',
