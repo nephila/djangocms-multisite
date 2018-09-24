@@ -2,35 +2,20 @@
 djangocms-multisite
 ===================
 
+`django-multisite <https://github.com/ecometrica/django-multisite>`_ support for DjangoCMS
+
 .. image:: https://img.shields.io/pypi/v/djangocms-multisite.svg?style=flat-square
     :target: https://pypi.python.org/pypi/djangocms-multisite
     :alt: Latest PyPI version
-
-.. image:: https://img.shields.io/pypi/dm/djangocms-multisite.svg?style=flat-square
-    :target: https://pypi.python.org/pypi/djangocms-multisite
-    :alt: Monthly downloads
 
 .. image:: https://img.shields.io/pypi/pyversions/djangocms-multisite.svg?style=flat-square
     :target: https://pypi.python.org/pypi/djangocms-multisite
     :alt: Python versions
 
-.. image:: https://img.shields.io/travis/nephila/djangocms-multisite.svg?style=flat-square
-    :target: https://travis-ci.org/nephila/djangocms-multisite
-    :alt: Latest Travis CI build status
+Support
+=======
 
-.. image:: https://img.shields.io/coveralls/nephila/djangocms-multisite/master.svg?style=flat-square
-    :target: https://coveralls.io/r/nephila/djangocms-multisite?branch=master
-    :alt: Test coverage
-
-.. image:: https://img.shields.io/codecov/c/github/nephila/djangocms-multisite/develop.svg?style=flat-square
-    :target: https://codecov.io/github/nephila/djangocms-multisite
-    :alt: Test coverage
-
-django-multisite support for django CMS
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-=======================================
-
-Supported Django versions:
+Supported *Django* versions:
 
 * Django 1.6
 * Django 1.7
