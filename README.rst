@@ -125,3 +125,8 @@ MULTISITE_CMS_ALIASES
 Dictionary (or OrderedDict) containing the mapping between the domain (as configured in django
 ``sites``) and a list of aliases. This is optional if all the aliases are configured as
 ``django-multisite`` aliases
+
+Troubleshooting
+===============
+
+* Domains in ``MULTISITE_CMS_URLS`` must be the same created in your database (via the interface in ``Home › Sites › Sites``).
