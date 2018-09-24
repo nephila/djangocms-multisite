@@ -58,12 +58,12 @@ Usage
 
 #. We need to add the configurations for `django-multisite <https://github.com/ecometrica/django-multisite>`_ :
 
-    #. Replace SITE_ID value with the SiteID function
+    * Replace SITE_ID value with the SiteID function::
 
         from multisite import SiteID
         SITE_ID = SiteID(default=1)
 
-    #. Add ``multisite``, ``djangocms_multisite`` to ``INSTALLED_APPS``
+    * Add ``multisite``, ``djangocms_multisite`` to ``INSTALLED_APPS``::
 
         INSTALLED_APPS=[
             ...
@@ -71,7 +71,7 @@ Usage
             'djangocms_multisite',
             ...
         ]
-    #. Add those loders in the TEMPLATES setting
+    * Add those loders in the TEMPLATES setting::
 
         TEMPLATES = [
             ...
@@ -89,7 +89,7 @@ Usage
             ...
         ]
 
-    #. For other settings (cache, etc.) check the `django-multisite <https://github.com/ecometrica/django-multisite>`_ page
+    * For other settings (cache, etc.) check the `django-multisite <https://github.com/ecometrica/django-multisite>`_ page
 
 #. Add ``multisite.middleware.DynamicSiteMiddleware`` and ``djangocms_multisite.middleware.CMSMultiSiteMiddleware`` to ``MIDDLEWARE_CLASSES``
     The order is important:
