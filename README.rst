@@ -26,10 +26,6 @@ djangocms-multisite
     :target: https://codecov.io/github/nephila/djangocms-multisite
     :alt: Test coverage
 
-.. image:: https://codeclimate.com/github/nephila/djangocms-multisite/badges/gpa.svg?style=flat-square
-   :target: https://codeclimate.com/github/nephila/djangocms-multisite
-   :alt: Code Climate
-
 django-multisite support for django CMS
 
 Supported Django versions:
