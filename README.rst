@@ -4,13 +4,7 @@ djangocms-multisite
 
 `django-multisite <https://github.com/ecometrica/django-multisite>`_ support for DjangoCMS
 
-.. image:: https://img.shields.io/pypi/v/djangocms-multisite.svg?style=flat-square
-    :target: https://pypi.python.org/pypi/djangocms-multisite
-    :alt: Latest PyPI version
-
-.. image:: https://img.shields.io/pypi/pyversions/djangocms-multisite.svg?style=flat-square
-    :target: https://pypi.python.org/pypi/djangocms-multisite
-    :alt: Python versions
+|Gitter| |PyPiVersion| |PyVersion| |Status| |TestCoverage| |CodeClimate| |License|
 
 Support
 =======
@@ -127,3 +121,33 @@ Troubleshooting
 ===============
 
 * Domains in ``MULTISITE_CMS_URLS`` must be the same created in your database (via the interface in ``Home › Sites › Sites``).
+
+
+
+.. |Gitter| image:: https://img.shields.io/badge/GITTER-join%20chat-brightgreen.svg?style=flat-square
+    :target: https://gitter.im/nephila/applications
+    :alt: Join the Gitter chat
+
+.. |PyPiVersion| image:: https://img.shields.io/pypi/v/djangocms-multisite.svg?style=flat-square
+    :target: https://pypi.python.org/pypi/djangocms-multisite
+    :alt: Latest PyPI version
+
+.. |PyVersion| image:: https://img.shields.io/pypi/pyversions/djangocms-multisite.svg?style=flat-square
+    :target: https://pypi.python.org/pypi/djangocms-multisite
+    :alt: Python versions
+
+.. |Status| image:: https://img.shields.io/travis/nephila/djangocms-multisite.svg?style=flat-square
+    :target: https://travis-ci.org/nephila/djangocms-multisite
+    :alt: Latest Travis CI build status
+
+.. |TestCoverage| image:: https://img.shields.io/coveralls/nephila/djangocms-multisite/master.svg?style=flat-square
+    :target: https://coveralls.io/r/nephila/djangocms-multisite?branch=master
+    :alt: Test coverage
+
+.. |License| image:: https://img.shields.io/github/license/nephila/djangocms-multisite.svg?style=flat-square
+   :target: https://pypi.python.org/pypi/djangocms-multisite/
+    :alt: License
+
+.. |CodeClimate| image:: https://codeclimate.com/github/nephila/djangocms-multisite/badges/gpa.svg?style=flat-square
+   :target: https://codeclimate.com/github/nephila/djangocms-multisite
+   :alt: Code Climate
