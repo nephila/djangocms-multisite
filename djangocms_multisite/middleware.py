@@ -4,11 +4,12 @@ from __future__ import absolute_import, print_function, unicode_literals
 from cms.utils.apphook_reload import reload_urlconf
 from django.conf import settings
 from django.core.urlresolvers import set_urlconf
+from django.utils.deprecation import MiddlewareMixin
 from django.utils.cache import patch_vary_headers
 from django.utils.six.moves import urllib_parse as urlparse
 
 
-class CMSMultiSiteMiddleware(object):
+class CMSMultiSiteMiddleware(MiddlewareMixin):
     def process_request(self, request):
         MULTISITE_CMS_URLS = getattr(settings, 'MULTISITE_CMS_URLS', {})
         MULTISITE_CMS_ALIASES = getattr(settings, 'MULTISITE_CMS_ALIASES', {})
