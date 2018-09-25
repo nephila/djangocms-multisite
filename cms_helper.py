@@ -2,13 +2,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
 
-import os
-
 from tempfile import mkdtemp
+
+from multisite import SiteID
 
 
 def gettext(s): return s
-from multisite import SiteID
+
 
 HELPER_SETTINGS = dict(
     ROOT_URLCONF='tests.test_utils.urls1',
@@ -61,7 +61,7 @@ HELPER_SETTINGS = dict(
 )
 
 try:
-    import djangocms_blog
+    import djangocms_blog  # NOQA
     HELPER_SETTINGS['INSTALLED_APPS'].extend([
         'filer',
         'easy_thumbnails',
@@ -94,6 +94,7 @@ def setup():
     import sys
     from djangocms_helper import runner
     runner.setup('djangocms_multisite', sys.modules[__name__], use_cms=True)
+
 
 if __name__ == '__main__':
     run()
