@@ -7,4 +7,4 @@ django-nose>=1.2
 flake8==3.8.2
 https://github.com/nephila/djangocms-helper/archive/develop.zip
 tox>=2.0
-wheel
+wheel==0.34.2
