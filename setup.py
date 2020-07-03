@@ -42,6 +42,7 @@ setup(
         'Natural Language :: English',
         'Framework :: Django',
         'Framework :: Django :: 1.11',
+        'Framework :: Django :: 2.2',
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
