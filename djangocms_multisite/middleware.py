@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import, print_function, unicode_literals
+from urllib.parse import urlparse
 
 from cms.utils.apphook_reload import reload_urlconf
 from django.conf import settings
 from django.urls import set_urlconf
 from django.utils.cache import patch_vary_headers
 from django.utils.deprecation import MiddlewareMixin
-from urllib.parse import urlparse
 
 
 class CMSMultiSiteMiddleware(MiddlewareMixin):
