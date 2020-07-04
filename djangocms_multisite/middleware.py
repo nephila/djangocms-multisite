@@ -9,42 +9,56 @@ from django.utils.deprecation import MiddlewareMixin
 
 
 class CMSMultiSiteMiddleware(MiddlewareMixin):
-    def process_request(self, request):
+    @staticmethod
+    def _get_domain(request):
+        """
+        Check current request domain against configured domains and alias
+        """
         MULTISITE_CMS_URLS = getattr(settings, 'MULTISITE_CMS_URLS', {})
         MULTISITE_CMS_ALIASES = getattr(settings, 'MULTISITE_CMS_ALIASES', {})
+        parsed = urlparse(request.build_absolute_uri())
+        host = parsed.hostname.split(':')[0]
+        if host in MULTISITE_CMS_URLS:
+            return host
+        else:
+            for domain, hosts in MULTISITE_CMS_ALIASES.items():
+                print("ALIAS", domain, host, hosts)
+                if host in hosts and domain in MULTISITE_CMS_URLS:
+                    return domain
+
+    @staticmethod
+    def _get_urlconf(domain):
+        """
+        Return the urlconf for the given domain in configuration.
+
+        If given does not match, fallbacks are checked.
+
+        If domain is ``None`` or no matching urlconf if found, ``None`` is returned,
+        resulting in setting the default urlconf.
+        """
+        MULTISITE_CMS_URLS = getattr(settings, 'MULTISITE_CMS_URLS', {})
         MULTISITE_CMS_FALLBACK = getattr(settings, 'MULTISITE_CMS_FALLBACK', '')
         try:
-            parsed = urlparse(request.build_absolute_uri())
-            host = parsed.hostname.split(':')[0]
-            urlconf = None
-            try:
-                urlconf = MULTISITE_CMS_URLS[host]
-            except KeyError:
-                for domain, hosts in MULTISITE_CMS_ALIASES.items():
-                    if host in hosts and domain in MULTISITE_CMS_URLS:
-                        urlconf = MULTISITE_CMS_URLS[domain]
-                        break
-            if (
-                not urlconf and
-                MULTISITE_CMS_FALLBACK and
-                MULTISITE_CMS_FALLBACK in MULTISITE_CMS_URLS.keys()
-            ):
-                urlconf = MULTISITE_CMS_URLS[MULTISITE_CMS_FALLBACK]
-
-            if urlconf:
-                request.urlconf = urlconf
-            # sets urlconf for current thread, so that code that does not know
-            # about the request (e.g MyModel.get_absolute_url()) get the correct
-            # urlconf.
-            set_urlconf(urlconf)
-            try:
-                # In django CMS 3.4.2 this allows us to save a few queries thanks to per-site appresolvers caching
-                reload_urlconf(clear_cache=False)
-            except TypeError:
-                reload_urlconf()
+            urlconf = MULTISITE_CMS_URLS[domain]
         except KeyError:
-            # use default urlconf (settings.ROOT_URLCONF)
-            set_urlconf(None)
+            urlconf = None
+        if (
+            not urlconf and
+            MULTISITE_CMS_FALLBACK and
+            MULTISITE_CMS_FALLBACK in MULTISITE_CMS_URLS.keys()
+        ):
+            urlconf = MULTISITE_CMS_URLS[MULTISITE_CMS_FALLBACK]
+        return urlconf
+
+    def process_request(self, request):
+        domain = self._get_domain(request)
+        urlconf = self._get_urlconf(domain)
+        # sets urlconf for current thread, so that code that does not know
+        # about the request (e.g MyModel.get_absolute_url()) get the correct
+        # urlconf.
+        # urlconf might be None, in that case, the default is set
+        set_urlconf(urlconf)
+        reload_urlconf()
 
     def process_response(self, request, response):
         patch_vary_headers(response, ('Host',))
