@@ -11,13 +11,12 @@ Support
 
 Supported *Django* versions:
 
-* Django 1.11
+* Django 3.0
 * Django 2.2
 
 Supported django CMS versions:
 
-* django CMS 3.4
-* django CMS 3.5
+* django CMS 3.7
 
 Assumptions
 ===========
