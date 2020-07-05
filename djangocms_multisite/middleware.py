@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from urllib.parse import urlparse
 
 from cms.utils.apphook_reload import reload_urlconf

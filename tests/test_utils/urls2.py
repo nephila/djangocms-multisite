@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from cms.utils.conf import get_cms_setting
 from django.conf import settings
 from django.conf.urls import include, url
