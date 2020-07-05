@@ -22,7 +22,6 @@ class CMSMultiSiteMiddleware(MiddlewareMixin):
             return host
         else:
             for domain, hosts in MULTISITE_CMS_ALIASES.items():
-                print("ALIAS", domain, host, hosts)
                 if host in hosts and domain in MULTISITE_CMS_URLS:
                     return domain
 

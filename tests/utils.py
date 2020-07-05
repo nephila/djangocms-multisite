@@ -1,6 +1,5 @@
 from django.test.client import RequestFactory as DjangoRequestFactory
 
-
 # borrowed from django-multisite, we can't import it directly due to pytest upstream dependencies
 
 class RequestFactory(DjangoRequestFactory):
