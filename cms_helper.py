@@ -54,7 +54,7 @@ HELPER_SETTINGS = dict(
     },
     MULTISITE_CMS_ALIASES={
         'www.example.com': ('alias1.example.com', 'alias2.example.com',),
-        'www.example2.com': ('alias1.example2.com', 'alias2.example2.com',),
+        'www.example2.com': ('alias1.example2.com', 'alias2.example2.com', 'alias3.example2.com:8000'),
     },
     MULTISITE_CMS_FALLBACK='www.example.com',
     ALLOWED_HOSTS=['*'],

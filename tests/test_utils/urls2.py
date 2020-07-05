@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from cms.utils.conf import get_cms_setting
 from django.conf import settings
 from django.conf.urls import include, url
@@ -18,12 +16,6 @@ urlpatterns = [
         {'document_root': get_cms_setting('MEDIA_ROOT'), 'show_indexes': True}),
     url(r'^jsi18n/$', JavaScriptCatalog.as_view(), name='javascript-catalog'),
 ]
-
-try:
-    import taggit_autosuggest
-    urlpatterns.append(url(r'^taggit_autosuggest/', include('taggit_autosuggest.urls')))
-except ImportError:
-    pass
 
 urlpatterns += staticfiles_urlpatterns()
 
