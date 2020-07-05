@@ -8,44 +8,53 @@ from django.utils.deprecation import MiddlewareMixin
 
 
 class CMSMultiSiteMiddleware(MiddlewareMixin):
+
     @staticmethod
-    def _get_domain(request):
+    def _get_sites():
+        return getattr(settings, 'MULTISITE_CMS_URLS', {})
+
+    @staticmethod
+    def _get_aliases():
+        return getattr(settings, 'MULTISITE_CMS_ALIASES', {})
+
+    @classmethod
+    def _get_domain(cls, request):
         """
         Check current request domain against configured domains and alias
         """
-        MULTISITE_CMS_URLS = getattr(settings, 'MULTISITE_CMS_URLS', {})
-        MULTISITE_CMS_ALIASES = getattr(settings, 'MULTISITE_CMS_ALIASES', {})
+        sites = cls._get_sites()
+        aliases = cls._get_aliases()
         parsed = urlparse(request.build_absolute_uri())
         host = parsed.hostname.split(':')[0]
-        if host in MULTISITE_CMS_URLS:
+        if host in sites:
             return host
         else:
-            for domain, hosts in MULTISITE_CMS_ALIASES.items():
-                if host in hosts and domain in MULTISITE_CMS_URLS:
+            for domain, hosts in aliases.items():
+                if host in hosts and domain in aliases:
                     return domain
 
-    @staticmethod
-    def _get_urlconf(domain):
+    @classmethod
+    def _get_urlconf(cls, domain):
         """
         Return the urlconf for the given domain in configuration.
 
-        If given does not match, fallbacks are checked.
+        If given does not match, fallback is checked.
 
         If domain is ``None`` or no matching urlconf if found, ``None`` is returned,
         resulting in setting the default urlconf.
         """
-        MULTISITE_CMS_URLS = getattr(settings, 'MULTISITE_CMS_URLS', {})
-        MULTISITE_CMS_FALLBACK = getattr(settings, 'MULTISITE_CMS_FALLBACK', '')
+        sites = cls._get_sites()
+        MULTISITE_CMS_FALLBACK = getattr(settings, 'MULTISITE_CMS_FALLBACK', '')  # noqa
         try:
-            urlconf = MULTISITE_CMS_URLS[domain]
+            urlconf = sites[domain]
         except KeyError:
             urlconf = None
         if (
             not urlconf and
             MULTISITE_CMS_FALLBACK and
-            MULTISITE_CMS_FALLBACK in MULTISITE_CMS_URLS.keys()
+            MULTISITE_CMS_FALLBACK in sites.keys()
         ):
-            urlconf = MULTISITE_CMS_URLS[MULTISITE_CMS_FALLBACK]
+            urlconf = sites[MULTISITE_CMS_FALLBACK]
         return urlconf
 
     def process_request(self, request):
