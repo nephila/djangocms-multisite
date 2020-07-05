@@ -3,7 +3,7 @@
 History
 -------
 
-0.3.0 (unreleased)
+0.3.0 (2020-07-05)
 ++++++++++++++++++
 
 * Django 2.2 / django CMS 3.7+ support
