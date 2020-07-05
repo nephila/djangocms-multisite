@@ -4,7 +4,7 @@ djangocms-multisite
 
 `django-multisite <https://github.com/ecometrica/django-multisite>`_ support for DjangoCMS
 
-|Gitter| |PyPiVersion| |PyVersion| |Status| |TestCoverage| |TestCoverage2| |CodeClimate| |License|
+|Gitter| |PyPiVersion| |PyVersion| |Status| |TestCoverage| |TestCoveralls| |CodeClimate| |License|
 
 Support
 =======
@@ -21,7 +21,7 @@ Supported django CMS versions:
 Assumptions
 ===========
 
-#. A virtualenv up and runnign
+#. A virtualenv up and running
 #. DjangoCMS working
 
 Installation
@@ -144,7 +144,7 @@ Troubleshooting
     :target: https://coveralls.io/r/nephila/djangocms-multisite?branch=master
     :alt: Test coverage
 
-.. |TestCoveraalls| image:: https://coveralls.io/repos/github/nephila/djangocms-multisite/badge.svg?branch=master
+.. |TestCoveralls| image:: https://coveralls.io/repos/github/nephila/djangocms-multisite/badge.svg?branch=master
     :target: https://coveralls.io/github/nephila/djangocms-multisite?branch=master
     :alt: Test coverage
 
