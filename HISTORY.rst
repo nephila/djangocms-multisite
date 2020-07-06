@@ -1,22 +1,27 @@
 .. :changelog:
 
 History
--------
+=======
+
+0.3.1 (unreleased)
+^^^^^^^^^^^^^^^^^^
+
+* Fix history formatting preventing proper pypi release
 
 0.3.0 (2020-07-05)
-++++++++++++++++++
+^^^^^^^^^^^^^^^^^^
 
-* Django 2.2 / django CMS 3.7+ support
-* Dropped older Django / django CMS versions
+* Add Django 2.2 / django CMS 3.7+ support
+* Drop older Django / django CMS versions
 
 0.2.0 (2018-09-25)
-++++++++++++++++++
+^^^^^^^^^^^^^^^^^^
 
-* Django 1.11 / django CMS 3.4+ support
-* Dropped older Django / django CMS versions
-* Improved documentation
+* Add Django 1.11 / django CMS 3.4+ support
+* Drop older Django / django CMS versions
+* Improve documentation
 
 0.1.0 (unreleased)
-++++++++++++++++++
+^^^^^^^^^^^^^^^^^^
 
 * First experimental release
