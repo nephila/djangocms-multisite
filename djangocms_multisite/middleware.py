@@ -8,14 +8,13 @@ from django.utils.deprecation import MiddlewareMixin
 
 
 class CMSMultiSiteMiddleware(MiddlewareMixin):
-
     @staticmethod
     def _get_sites():
-        return getattr(settings, 'MULTISITE_CMS_URLS', {})
+        return getattr(settings, "MULTISITE_CMS_URLS", {})
 
     @staticmethod
     def _get_aliases():
-        return getattr(settings, 'MULTISITE_CMS_ALIASES', {})
+        return getattr(settings, "MULTISITE_CMS_ALIASES", {})
 
     @classmethod
     def _get_domain(cls, request):
@@ -25,7 +24,7 @@ class CMSMultiSiteMiddleware(MiddlewareMixin):
         sites = cls._get_sites()
         aliases = cls._get_aliases()
         parsed = urlparse(request.build_absolute_uri())
-        host = parsed.hostname.split(':')[0]
+        host = parsed.hostname.split(":")[0]
         if host in sites:
             return host
         else:
@@ -44,16 +43,12 @@ class CMSMultiSiteMiddleware(MiddlewareMixin):
         resulting in setting the default urlconf.
         """
         sites = cls._get_sites()
-        MULTISITE_CMS_FALLBACK = getattr(settings, 'MULTISITE_CMS_FALLBACK', '')  # noqa
+        MULTISITE_CMS_FALLBACK = getattr(settings, "MULTISITE_CMS_FALLBACK", "")  # noqa
         try:
             urlconf = sites[domain]
         except KeyError:
             urlconf = None
-        if (
-            not urlconf and
-            MULTISITE_CMS_FALLBACK and
-            MULTISITE_CMS_FALLBACK in sites.keys()
-        ):
+        if not urlconf and MULTISITE_CMS_FALLBACK and MULTISITE_CMS_FALLBACK in sites.keys():
             urlconf = sites[MULTISITE_CMS_FALLBACK]
         return urlconf
 
@@ -68,7 +63,7 @@ class CMSMultiSiteMiddleware(MiddlewareMixin):
         reload_urlconf()
 
     def process_response(self, request, response):
-        patch_vary_headers(response, ('Host',))
+        patch_vary_headers(response, ("Host",))
         # set back to default urlconf
         set_urlconf(None)
         return response
