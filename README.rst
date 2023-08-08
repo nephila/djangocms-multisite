@@ -6,8 +6,9 @@ djangocms-multisite
 
 |Gitter| |PyPiVersion| |PyVersion| |Status| |TestCoverage| |TestCoveralls| |CodeClimate| |License|
 
+*******
 Support
-=======
+*******
 
 Supported *Django* versions:
 
@@ -18,19 +19,22 @@ Supported django CMS versions:
 
 * django CMS 3.7
 
+***********
 Assumptions
-===========
+***********
 
 #. A virtualenv up and running
 #. DjangoCMS working
 
+************
 Installation
-============
+************
 
 ``pip install djangocms-multisite``
 
+*****
 Usage
-=====
+*****
 
 #. Open your ``settings.py`` file
 
@@ -95,30 +99,31 @@ Usage
 
 #. Run ``python manage.py migrate`` to apply the `django-multisite <https://github.com/ecometrica/django-multisite>`_ migrations
 
-
+********************
 Settings explanation
-====================
+********************
 
 MULTISITE_CMS_URLS
-^^^^^^^^^^^^^^^^^^
+==================
 
 Dictionary (or OrderedDict) containing the mapping between the domain (as configured in django
 ``sites``) and the corresponding urlconf.
 
 MULTISITE_CMS_FALLBACK
-^^^^^^^^^^^^^^^^^^^^^^
+======================
 
 The default domain to load if any of the above does not match.
 
 MULTISITE_CMS_ALIASES
-^^^^^^^^^^^^^^^^^^^^^
+=====================
 
 Dictionary (or OrderedDict) containing the mapping between the domain (as configured in django
 ``sites``) and a list of aliases. This is optional if all the aliases are configured as
 ``django-multisite`` aliases
 
+***************
 Troubleshooting
-===============
+***************
 
 * Domains in ``MULTISITE_CMS_URLS`` must be the same created in your database (via the interface in ``Home › Sites › Sites``).
 
