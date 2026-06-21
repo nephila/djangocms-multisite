@@ -19,25 +19,25 @@ jobs:
             cms: 311
             continue-on-error: true
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: ${{ matrix.python-version }}
     - name: Cache pip
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ matrix.toxenv }}
+        key: ${{ runner.os }}-pip-py${{ matrix.python-version }}-django${{ matrix.django }}-cms${{ matrix.cms }}
         restore-keys: |
-          ${{ runner.os }}-pip-${{ matrix.toxenv }}
+          ${{ runner.os }}-pip-py${{ matrix.python-version }}-django${{ matrix.django }}-cms${{ matrix.cms }}
     - name: Cache tox
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: .tox
-        key: ${{ runner.os }}-tox-${{ format('{{py{0}-django{1}-cms{2}}}', matrix.python-version, matrix.django, matrix.cms) }}-${{ hashFiles('setup.cfg') }}
+        key: ${{ runner.os }}-tox-py${{ matrix.python-version }}-django${{ matrix.django }}-cms${{ matrix.cms }}-${{ hashFiles('setup.cfg') }}
         restore-keys: |
-          ${{ runner.os }}-tox-${{ format('{{py{0}-django{1}-cms{2}}}', matrix.python-version, matrix.django, matrix.cms) }}-
+          ${{ runner.os }}-tox-py${{ matrix.python-version }}-django${{ matrix.django }}-cms${{ matrix.cms }}-
     - name: Install dependencies
       run: |
         sudo apt-get install gettext
@@ -51,7 +51,7 @@ jobs:
         tox -e$TOX_ENV
         .tox/$TOX_ENV/bin/coverage xml
         .tox/$TOX_ENV/bin/coveralls || true
-    - uses: codecov/codecov-action@v4
+    - uses: codecov/codecov-action@v7
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         flags: unittests
