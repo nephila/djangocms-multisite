@@ -108,14 +108,11 @@ class CMSMultiSiteMiddlewareAliasTest(BaseTestCase):
         Site.objects.all().delete()
         self.site = Site.objects.create(pk=1, domain="www.example.com")
         self.site2 = Site.objects.create(pk=2, domain="www.example2.com")
-        # Canonical aliases (is_canonical=1) are required so DynamicSiteMiddleware
-        # recognises the main domains and calls through to get_response instead of
-        # hitting the fallback_view path (404).
-        Alias.objects.create(domain="www.example.com", site=self.site, is_canonical=1)
-        Alias.objects.create(domain="www.example2.com", site=self.site2, is_canonical=1)
-        # redirect_to_canonical defaults to True in django-multisite2.  Set it
-        # False for the aliases we want DynamicSiteMiddleware to pass through;
-        # leave it True for the ones that should redirect.
+        # django-multisite2 creates canonical Alias rows automatically via
+        # post_save_site_created when Site objects are saved above, so we only
+        # need to create the non-canonical aliases here.
+        # redirect_to_canonical defaults to True in django-multisite2; set it
+        # False for aliases that should pass through to CMSMultiSiteMiddleware.
         Alias.objects.create(domain="alias1.example.com", site=self.site, redirect_to_canonical=False)
         Alias.objects.create(domain="alias2.example.com", site=self.site, redirect_to_canonical=True)
         Alias.objects.create(domain="alias1.example2.com", site=self.site2, redirect_to_canonical=False)
