@@ -36,10 +36,6 @@ HELPER_SETTINGS = dict(
             "hide_untranslated": False,
         },
     },
-    MIDDLEWARE=(
-        "multisite.middleware.DynamicSiteMiddleware",
-        "djangocms_multisite.middleware.CMSMultiSiteMiddleware",
-    ),
     MIGRATION_MODULES={},
     USE_TZ=True,
     TIME_ZONE="UTC",
