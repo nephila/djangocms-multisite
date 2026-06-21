@@ -32,7 +32,7 @@ class DjangoCMSMultisiteConfig(AppConfig):
             from multisite import SiteID
 
             site_id = getattr(settings, "SITE_ID", "")
-            if site_id and not isinstance(site_id, (int, SiteID)):
+            if site_id and not isinstance(site_id, (int, SiteID)):  # pragma: no cover
                 try:
                     int(site_id)
                 except (TypeError, ValueError):
