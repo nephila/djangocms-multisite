@@ -36,7 +36,7 @@ HELPER_SETTINGS = dict(
             "hide_untranslated": False,
         },
     },
-    MIDDLEWARE_CLASSES=(
+    MIDDLEWARE=(
         "multisite.middleware.DynamicSiteMiddleware",
         "djangocms_multisite.middleware.CMSMultiSiteMiddleware",
     ),

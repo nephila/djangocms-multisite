@@ -9,30 +9,30 @@ jobs:
     continue-on-error: ${{ matrix.continue-on-error }}
     strategy:
       matrix:
-        python-version: ["3.11", "3.10", "3.9"]
-        django: [42, 41, 32]
-        cms: [311, 39]
-        continue-on-error: [true]
-        exclude:
-          - django: 41
-            cms: 39
-          - django: 42
-            cms: 39
+        python-version: ["3.11", "3.12", "3.13"]
+        django: [42, 52]
+        cms: [311]
+        continue-on-error: [false]
+        include:
+          - python-version: "3.13"
+            django: 42
+            cms: 311
+            continue-on-error: true
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
     - name: Cache pip
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/.cache/pip
         key: ${{ runner.os }}-pip-${{ matrix.toxenv }}
         restore-keys: |
           ${{ runner.os }}-pip-${{ matrix.toxenv }}
     - name: Cache tox
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: .tox
         key: ${{ runner.os }}-tox-${{ format('{{py{0}-django{1}-cms{2}}}', matrix.python-version, matrix.django, matrix.cms) }}-${{ hashFiles('setup.cfg') }}
@@ -52,7 +52,7 @@ jobs:
         tox -e$TOX_ENV
         .tox/$TOX_ENV/bin/coverage xml
         .tox/$TOX_ENV/bin/coveralls
-    - uses: codecov/codecov-action@v3
+    - uses: codecov/codecov-action@v4
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         flags: unittests

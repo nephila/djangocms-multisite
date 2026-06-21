@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.black]
 line-length = 119
-target-version = ["py310"]
+target-version = ["py311"]
 
 [tool.towncrier]
 package = "djangocms_multisite"
@@ -42,7 +42,7 @@ use_parentheses = true
 [tool.ruff]
 ignore = []
 line-length = 119
-target-version = "py310"
+target-version = "py311"
 
 [tool.ruff.mccabe]
 max-complexity = 10
