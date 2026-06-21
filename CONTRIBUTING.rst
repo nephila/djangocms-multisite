@@ -150,17 +150,36 @@ Before you submit a pull request, check that it meets these guidelines:
 Release a version
 =================
 
+Version bumping is handled by `bump-my-version <https://callowayproject.github.io/bump-my-version/>`_.
+Two pre-release workflows are supported:
+
+* **Full pre-release**: ``dev → b → rc → release``
+
+  .. code-block:: bash
+
+      bump-my-version bump pre_label   # dev → b
+      bump-my-version bump pre_label   # b  → rc
+      bump-my-version bump pre_label   # rc → release
+
+* **Direct release**: ``dev → release``
+
+  .. code-block:: bash
+
+      bump-my-version bump --new-version <X.Y.Z>
+
+Release steps:
+
 #. Update authors file
 #. Merge ``develop`` on ``master`` branch
 #. Bump release via task: ``inv tag-release (major|minor|patch)``
 #. Update changelog via towncrier: ``towncrier --yes``
-#. Commit changelog with ``git commit --amend`` to merge with bumpversion commit
+#. Commit changelog with ``git commit --amend`` to merge with bump-my-version commit
 #. Create tag ``git tag <version>``
 #. Push tag to github
 #. Publish the release from the tags page
 #. If pipeline succeeds, push ``master``
 #. Merge ``master`` back on ``develop``
-#. Bump developement version via task: ``inv tag-dev -l (major|minor|patch)``
+#. Bump development version via task: ``inv tag-dev -l (major|minor|patch)``
 #. Push ``develop``
 
 .. _towncrier: https://pypi.org/project/towncrier/#news-fragments

@@ -110,7 +110,7 @@ def tag_release(c, level, new_version=""):
     """Tag release version."""
     if new_version:
         new_version = f" --new-version {new_version}"
-    c.run(f"bumpversion --list {level} --no-tag{new_version}")
+    c.run(f"bump-my-version bump {level} --no-tag{new_version}")
 
 
 @task
@@ -118,4 +118,4 @@ def tag_dev(c, level="patch", new_version=""):
     """Tag development version."""
     if new_version:
         new_version = f" --new-version {new_version}"
-    c.run(f"bumpversion --list {level} --message='Bump develop version [ci skip]' --no-tag{new_version}")
+    c.run(f"bump-my-version bump {level} --commit-message 'Bump develop version [ci skip]' --no-tag{new_version}")
