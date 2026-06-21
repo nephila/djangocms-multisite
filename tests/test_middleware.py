@@ -54,53 +54,52 @@ class CMSMultiSiteMiddlewareTest(BaseTestCase):
         self.assertEqual(CMSMultiSiteMiddleware._get_urlconf("alias1.example.com"), "tests.test_utils.urls1")
         self.assertEqual(CMSMultiSiteMiddleware._get_urlconf("alias2.example2.com"), "tests.test_utils.urls1")
 
+    def _get_urlconf_during_request(self, host):
+        """Run the middleware and return the urlconf observed inside get_response."""
+        captured = []
+
+        def get_response(request):
+            captured.append(get_urlconf())
+            return HttpResponse("")
+
+        CMSMultiSiteMiddleware(get_response)(RequestFactory(host=host).get("/"))
+        return captured[0]
+
     @override_settings(SITE_ID=1)
     def test_process_site_1(self):
-        request = RequestFactory(host="www.example.com").get("/")
-        get_response = mock.MagicMock()
-        CMSMultiSiteMiddleware(get_response).process_request(request)
-        self.assertEqual(get_urlconf(), "tests.test_utils.urls1")
-
-        request = RequestFactory(host="alias1.example.com").get("/")
-        CMSMultiSiteMiddleware(get_response).process_request(request)
-        self.assertEqual(get_urlconf(), "tests.test_utils.urls1")
+        self.assertEqual(self._get_urlconf_during_request("www.example.com"), "tests.test_utils.urls1")
+        self.assertEqual(self._get_urlconf_during_request("alias1.example.com"), "tests.test_utils.urls1")
 
     @override_settings(SITE_ID=2)
     def test_process_site_2(self):
-        request = RequestFactory(host="www.example2.com").get("/")
-        get_response = mock.MagicMock()
-        CMSMultiSiteMiddleware(get_response).process_request(request)
-        self.assertEqual(get_urlconf(), "tests.test_utils.urls2")
-
-        request = RequestFactory(host="alias2.example2.com").get("/")
-        CMSMultiSiteMiddleware(get_response).process_request(request)
-        self.assertEqual(get_urlconf(), "tests.test_utils.urls2")
+        self.assertEqual(self._get_urlconf_during_request("www.example2.com"), "tests.test_utils.urls2")
+        self.assertEqual(self._get_urlconf_during_request("alias2.example2.com"), "tests.test_utils.urls2")
 
         # don't set port in MULTISITE_CMS_ALIASES, otherwise it will not be matched
-        request = RequestFactory(host="alias3.example2.com").get("/")
-        CMSMultiSiteMiddleware(get_response).process_request(request)
-        self.assertEqual(get_urlconf(), "tests.test_utils.urls1")
-
-        # don't set port in MULTISITE_CMS_ALIASES, otherwise it will not be matched
-        request = RequestFactory(host="alias3.example2.com:8000").get("/")
-        CMSMultiSiteMiddleware(get_response).process_request(request)
-        self.assertEqual(get_urlconf(), "tests.test_utils.urls1")
+        self.assertEqual(self._get_urlconf_during_request("alias3.example2.com"), "tests.test_utils.urls1")
+        self.assertEqual(self._get_urlconf_during_request("alias3.example2.com:8000"), "tests.test_utils.urls1")
 
     @override_settings(SITE_ID=2)
-    def test_process_reponse(self):
-        request = RequestFactory(host="www.example2.com").get("/")
-        get_response = mock.MagicMock()
-        CMSMultiSiteMiddleware(get_response).process_request(request)
-        self.assertEqual(get_urlconf(), "tests.test_utils.urls2")
-        CMSMultiSiteMiddleware(get_response).process_response(request, HttpResponse(""))
-        # Default is restored after request is processed
-        self.assertIsNone(get_urlconf())
+    def test_urlconf_restored_after_request(self):
+        """urlconf is reset to None after each completed request."""
+        for host in ("www.example2.com", "alias2.example2.com"):
+            CMSMultiSiteMiddleware(lambda r: HttpResponse(""))(RequestFactory(host=host).get("/"))
+            self.assertIsNone(get_urlconf(), msg=f"urlconf not cleaned up for host {host}")
 
-        request = RequestFactory(host="alias2.example2.com").get("/")
-        CMSMultiSiteMiddleware(get_response).process_request(request)
-        self.assertEqual(get_urlconf(), "tests.test_utils.urls2")
-        CMSMultiSiteMiddleware(get_response).process_response(request, HttpResponse(""))
-        # Default is restored after request is processed
+    def test_urlconf_restored_after_exception(self):
+        """urlconf is reset to None even when a BaseException escapes the inner handler."""
+        captured_inside = []
+
+        def raise_system_exit(request):
+            captured_inside.append(get_urlconf())
+            raise SystemExit("simulated crash")
+
+        with self.assertRaises(SystemExit):
+            CMSMultiSiteMiddleware(raise_system_exit)(RequestFactory(host="www.example.com").get("/"))
+
+        # The urlconf was set during the request
+        self.assertEqual(captured_inside[0], "tests.test_utils.urls1")
+        # And was cleaned up despite the BaseException
         self.assertIsNone(get_urlconf())
 
 
@@ -115,31 +114,34 @@ class CMSMultiSiteMiddlewareAliasTest(BaseTestCase):
         Alias.objects.create(domain="alias1.example2.com", site=self.site2)
         Alias.objects.create(domain="alias2.example2.com", site=self.site2, redirect_to_canonical=True)
 
-    def test_process_site_1(self):
-        request = RequestFactory(host="www.example.com").get("/")
-        get_response = mock.MagicMock()
-        DynamicSiteMiddleware(get_response).process_request(request)
-        CMSMultiSiteMiddleware(get_response).process_request(request)
-        self.assertEqual(get_urlconf(), "tests.test_utils.urls1")
+    def _get_urlconf_during_request(self, host):
+        """
+        Simulate DynamicSiteMiddleware + CMSMultiSiteMiddleware in sequence
+        and return the urlconf observed inside get_response.
+        """
+        captured = []
+        mock_get_response = mock.MagicMock(return_value=HttpResponse(""))
 
-        request = RequestFactory(host="alias1.example.com").get("/")
-        DynamicSiteMiddleware(get_response).process_request(request)
-        CMSMultiSiteMiddleware(get_response).process_request(request)
-        self.assertEqual(get_urlconf(), "tests.test_utils.urls1")
+        request = RequestFactory(host=host).get("/")
+        DynamicSiteMiddleware(mock_get_response).process_request(request)
+
+        def capture_get_response(req):
+            captured.append(get_urlconf())
+            return HttpResponse("")
+
+        CMSMultiSiteMiddleware(capture_get_response)(request)
+        return captured[0]
+
+    def test_process_site_1(self):
+        self.assertEqual(self._get_urlconf_during_request("www.example.com"), "tests.test_utils.urls1")
+        self.assertEqual(self._get_urlconf_during_request("alias1.example.com"), "tests.test_utils.urls1")
 
     def test_process_site_2(self):
-        request = RequestFactory(host="www.example2.com").get("/")
-        get_response = mock.MagicMock()
-        DynamicSiteMiddleware(get_response).process_request(request)
-        CMSMultiSiteMiddleware(get_response).process_request(request)
-        self.assertEqual(get_urlconf(), "tests.test_utils.urls2")
+        self.assertEqual(self._get_urlconf_during_request("www.example2.com"), "tests.test_utils.urls2")
+        self.assertEqual(self._get_urlconf_during_request("alias2.example2.com"), "tests.test_utils.urls2")
 
-        request = RequestFactory(host="alias2.example2.com").get("/")
-        DynamicSiteMiddleware(get_response).process_request(request)
-        CMSMultiSiteMiddleware(get_response).process_request(request)
-        self.assertEqual(get_urlconf(), "tests.test_utils.urls2")
-
-        # aliases not configured on django-multisite will not be recognizes
+        # aliases not configured on django-multisite will not be recognized
         request = RequestFactory(host="alias3.example2.com").get("/")
+        get_response = mock.MagicMock(return_value=HttpResponse(""))
         with self.assertRaises(Http404):
             DynamicSiteMiddleware(get_response).process_request(request)

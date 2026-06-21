@@ -4,10 +4,12 @@ from cms.utils.apphook_reload import reload_urlconf
 from django.conf import settings
 from django.urls import set_urlconf
 from django.utils.cache import patch_vary_headers
-from django.utils.deprecation import MiddlewareMixin
 
 
-class CMSMultiSiteMiddleware(MiddlewareMixin):
+class CMSMultiSiteMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
     @staticmethod
     def _get_sites():
         return getattr(settings, "MULTISITE_CMS_URLS", {})
@@ -52,18 +54,21 @@ class CMSMultiSiteMiddleware(MiddlewareMixin):
             urlconf = sites[MULTISITE_CMS_FALLBACK]
         return urlconf
 
-    def process_request(self, request):
+    def __call__(self, request):
         domain = self._get_domain(request)
         urlconf = self._get_urlconf(domain)
-        # sets urlconf for current thread, so that code that does not know
-        # about the request (e.g MyModel.get_absolute_url()) get the correct
-        # urlconf.
-        # urlconf might be None, in that case, the default is set
-        set_urlconf(urlconf)
+        # Reload URL patterns before setting the thread-local urlconf so that
+        # any set_urlconf call inside reload_urlconf cannot override ours.
         reload_urlconf()
-
-    def process_response(self, request, response):
+        # Sets the thread-local urlconf so code outside the request/response
+        # cycle (e.g. Model.get_absolute_url()) resolves URLs against the
+        # correct site configuration. urlconf may be None, restoring the default.
+        set_urlconf(urlconf)
+        try:
+            response = self.get_response(request)
+        finally:
+            # Guaranteed cleanup: resets the thread-local even if a BaseException
+            # (e.g. SystemExit, KeyboardInterrupt) bypasses Django's exception handler.
+            set_urlconf(None)
         patch_vary_headers(response, ("Host",))
-        # set back to default urlconf
-        set_urlconf(None)
         return response
