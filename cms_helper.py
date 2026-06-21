@@ -2,7 +2,7 @@
 
 from tempfile import mkdtemp
 
-from multisite import SiteID, checks  # NOQA
+from multisite import SiteID  # NOQA
 
 
 def gettext(s):
