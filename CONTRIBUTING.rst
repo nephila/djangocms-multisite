@@ -111,7 +111,7 @@ Testing tips
 ----------------
 You can test your project using any specific combination of python, django and django cms.
 
-For example ``tox -py37-django30-cms37`` runs the tests on python 3.7, Django 3.0 and django CMS 3.7.
+For example ``tox -epy311-django42-cms311`` runs the tests on Python 3.11, Django 4.2 and django CMS 3.11.
 
 
 Pull Request Guidelines

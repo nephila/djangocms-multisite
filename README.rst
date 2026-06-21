@@ -2,9 +2,9 @@
 djangocms-multisite
 ===================
 
-`django-multisite <https://github.com/ecometrica/django-multisite>`_ support for DjangoCMS
+`django-multisite2 <https://pypi.org/project/django-multisite2/>`_ support for django CMS
 
-|Gitter| |PyPiVersion| |PyVersion| |Status| |TestCoverage| |TestCoveralls| |CodeClimate| |License|
+|Gitter| |PyPiVersion| |PyVersion| |GHActions| |TestCoverage| |TestCoveralls| |License|
 
 *******
 Support
@@ -12,12 +12,12 @@ Support
 
 Supported *Django* versions:
 
-* Django 3.0
-* Django 2.2
+* Django 4.2
+* Django 5.2
 
 Supported django CMS versions:
 
-* django CMS 3.7
+* django CMS 3.11
 
 ***********
 Assumptions
@@ -38,7 +38,7 @@ Usage
 
 #. Open your ``settings.py`` file
 
-#. We need to add the configurations for `django-multisite <https://github.com/ecometrica/django-multisite>`_ :
+#. We need to add the configurations for `django-multisite2 <https://pypi.org/project/django-multisite2/>`_ :
 
    * Replace SITE_ID value with the SiteID function::
 
@@ -71,11 +71,11 @@ Usage
             ...
         ]
 
-   * For other settings (cache, etc.) check the `django-multisite <https://github.com/ecometrica/django-multisite>`_ page
+   * For other settings (cache, etc.) check the `django-multisite2 <https://pypi.org/project/django-multisite2/>`_ page
 
-#. Add ``multisite.middleware.DynamicSiteMiddleware`` and ``djangocms_multisite.middleware.CMSMultiSiteMiddleware`` to ``MIDDLEWARE_CLASSES``. The order is important: ``multisite.middleware.DynamicSiteMiddleware`` must be applied before ``cms.middleware.utils.ApphookReloadMiddleware``, while ``djangocms_multisite.middleware.CMSMultiSiteMiddleware`` must be right after::
+#. Add ``multisite.middleware.DynamicSiteMiddleware`` and ``djangocms_multisite.middleware.CMSMultiSiteMiddleware`` to ``MIDDLEWARE``. The order is important: ``multisite.middleware.DynamicSiteMiddleware`` must be applied before ``cms.middleware.utils.ApphookReloadMiddleware``, while ``djangocms_multisite.middleware.CMSMultiSiteMiddleware`` must be right after::
 
-    MIDDLEWARE_CLASSES = [
+    MIDDLEWARE = [
         ...
         'multisite.middleware.DynamicSiteMiddleware',
         'cms.middleware.utils.ApphookReloadMiddleware',
@@ -97,7 +97,7 @@ Usage
 
 #. Run ``python manage.py makemigrations``
 
-#. Run ``python manage.py migrate`` to apply the `django-multisite <https://github.com/ecometrica/django-multisite>`_ migrations
+#. Run ``python manage.py migrate`` to apply the `django-multisite2 <https://pypi.org/project/django-multisite2/>`_ migrations
 
 ********************
 Settings explanation
@@ -119,7 +119,7 @@ MULTISITE_CMS_ALIASES
 
 Dictionary (or OrderedDict) containing the mapping between the domain (as configured in django
 ``sites``) and a list of aliases. This is optional if all the aliases are configured as
-``django-multisite`` aliases
+``django-multisite2`` aliases
 
 ***************
 Troubleshooting
@@ -141,9 +141,9 @@ Troubleshooting
     :target: https://pypi.python.org/pypi/djangocms-multisite
     :alt: Python versions
 
-.. |Status| image:: https://img.shields.io/travis/nephila/djangocms-multisite.svg?style=flat-square
-    :target: https://travis-ci.org/nephila/djangocms-multisite
-    :alt: Latest Travis CI build status
+.. |GHActions| image:: https://github.com/nephila/djangocms-multisite/actions/workflows/test.yml/badge.svg
+    :target: https://github.com/nephila/djangocms-multisite/actions/workflows/test.yml
+    :alt: GitHub Actions CI status
 
 .. |TestCoverage| image:: https://img.shields.io/coveralls/nephila/djangocms-multisite/master.svg?style=flat-square
     :target: https://coveralls.io/r/nephila/djangocms-multisite?branch=master
@@ -154,9 +154,5 @@ Troubleshooting
     :alt: Test coverage
 
 .. |License| image:: https://img.shields.io/github/license/nephila/djangocms-multisite.svg?style=flat-square
-   :target: https://pypi.python.org/pypi/djangocms-multisite/
+    :target: https://pypi.python.org/pypi/djangocms-multisite/
     :alt: License
-
-.. |CodeClimate| image:: https://codeclimate.com/github/nephila/djangocms-multisite/badges/gpa.svg?style=flat-square
-   :target: https://codeclimate.com/github/nephila/djangocms-multisite
-   :alt: Code Climate
