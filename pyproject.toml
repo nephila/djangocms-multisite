@@ -1,6 +1,49 @@
 [build-system]
-requires = ["setuptools>=40.6.0", "wheel"]
+requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "djangocms-multisite"
+dynamic = ["version", "readme"]
+description = "django-multisite2 support for django CMS"
+license = {file = "LICENSE"}
+authors = [
+    {name = "Iacopo Spalletti", email = "i.spalletti@nephila.digital"},
+]
+keywords = ["djangocms-multisite", "django"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Framework :: Django",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: BSD License",
+    "Natural Language :: English",
+    "Framework :: Django :: 4.2",
+    "Framework :: Django :: 5.2",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+requires-python = ">=3.11"
+dependencies = [
+    "django-multisite2",
+    "django-cms",
+]
+
+[project.urls]
+Homepage = "https://github.com/nephila/djangocms-multisite"
+
+[tool.setuptools]
+packages = ["djangocms_multisite"]
+include-package-data = true
+
+[tool.setuptools.dynamic]
+version = {attr = "djangocms_multisite.__version__"}
+readme = {file = ["README.rst", "HISTORY.rst"], content-type = "text/x-rst"}
+
+[tool.setuptools.package-data]
+"*" = ["*.txt", "*.rst"]
+djangocms_multisite = ["*.html", "*.png", "*.gif", "*js", "*jpg", "*jpeg", "*svg", "*py", "*mo", "*po"]
 
 [tool.black]
 line-length = 119
