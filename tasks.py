@@ -13,7 +13,6 @@ SPECIAL_BRANCHES = ("master", "develop", "release", "support/4.0.x")
 @task
 def clean(c):
     """Remove artifacts and binary files."""
-    c.run("python setup.py clean --all")
     patterns = ["build", "dist"]
     patterns.extend(glob("*.egg*"))
     patterns.append("**/*.pyc")
