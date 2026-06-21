@@ -120,16 +120,13 @@ class CMSMultiSiteMiddlewareAliasTest(BaseTestCase):
         and return the urlconf observed inside get_response.
         """
         captured = []
-        mock_get_response = mock.MagicMock(return_value=HttpResponse(""))
-
-        request = RequestFactory(host=host).get("/")
-        DynamicSiteMiddleware(mock_get_response).process_request(request)
 
         def capture_get_response(req):
             captured.append(get_urlconf())
             return HttpResponse("")
 
-        CMSMultiSiteMiddleware(capture_get_response)(request)
+        request = RequestFactory(host=host).get("/")
+        DynamicSiteMiddleware(CMSMultiSiteMiddleware(capture_get_response))(request)
         return captured[0]
 
     def test_process_site_1(self):
@@ -142,6 +139,5 @@ class CMSMultiSiteMiddlewareAliasTest(BaseTestCase):
 
         # aliases not configured on django-multisite will not be recognized
         request = RequestFactory(host="alias3.example2.com").get("/")
-        get_response = mock.MagicMock(return_value=HttpResponse(""))
         with self.assertRaises(Http404):
-            DynamicSiteMiddleware(get_response).process_request(request)
+            DynamicSiteMiddleware(mock.MagicMock(return_value=HttpResponse("")))(request)
