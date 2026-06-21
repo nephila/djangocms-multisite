@@ -108,16 +108,25 @@ class CMSMultiSiteMiddlewareAliasTest(BaseTestCase):
         Site.objects.all().delete()
         self.site = Site.objects.create(pk=1, domain="www.example.com")
         self.site2 = Site.objects.create(pk=2, domain="www.example2.com")
-        Alias.objects.create(domain="alias1.example.com", site=self.site)
+        # Canonical aliases (is_canonical=1) are required so DynamicSiteMiddleware
+        # recognises the main domains and calls through to get_response instead of
+        # hitting the fallback_view path (404).
+        Alias.objects.create(domain="www.example.com", site=self.site, is_canonical=1)
+        Alias.objects.create(domain="www.example2.com", site=self.site2, is_canonical=1)
+        # redirect_to_canonical defaults to True in django-multisite2.  Set it
+        # False for the aliases we want DynamicSiteMiddleware to pass through;
+        # leave it True for the ones that should redirect.
+        Alias.objects.create(domain="alias1.example.com", site=self.site, redirect_to_canonical=False)
         Alias.objects.create(domain="alias2.example.com", site=self.site, redirect_to_canonical=True)
-
-        Alias.objects.create(domain="alias1.example2.com", site=self.site2)
+        Alias.objects.create(domain="alias1.example2.com", site=self.site2, redirect_to_canonical=False)
         Alias.objects.create(domain="alias2.example2.com", site=self.site2, redirect_to_canonical=True)
 
     def _get_urlconf_during_request(self, host):
         """
         Simulate DynamicSiteMiddleware + CMSMultiSiteMiddleware in sequence
         and return the urlconf observed inside get_response.
+        Only valid for hosts where DynamicSiteMiddleware calls through
+        (canonical aliases and redirect_to_canonical=False aliases).
         """
         captured = []
 
@@ -130,14 +139,18 @@ class CMSMultiSiteMiddlewareAliasTest(BaseTestCase):
         return captured[0]
 
     def test_process_site_1(self):
+        # Canonical domain: DynamicSiteMiddleware calls through
         self.assertEqual(self._get_urlconf_during_request("www.example.com"), "tests.test_utils.urls1")
+        # Non-redirect alias: DynamicSiteMiddleware calls through
         self.assertEqual(self._get_urlconf_during_request("alias1.example.com"), "tests.test_utils.urls1")
 
     def test_process_site_2(self):
+        # Canonical domain: DynamicSiteMiddleware calls through
         self.assertEqual(self._get_urlconf_during_request("www.example2.com"), "tests.test_utils.urls2")
-        self.assertEqual(self._get_urlconf_during_request("alias2.example2.com"), "tests.test_utils.urls2")
+        # Non-redirect alias: DynamicSiteMiddleware calls through
+        self.assertEqual(self._get_urlconf_during_request("alias1.example2.com"), "tests.test_utils.urls2")
 
-        # aliases not configured on django-multisite will not be recognized
+        # Hosts unknown to DynamicSiteMiddleware raise Http404
         request = RequestFactory(host="alias3.example2.com").get("/")
         with self.assertRaises(Http404):
             DynamicSiteMiddleware(mock.MagicMock(return_value=HttpResponse("")))(request)
