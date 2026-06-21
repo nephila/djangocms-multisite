@@ -1,1 +1,1 @@
-Upgrade package tooling, drop Django<3.2, DjangoCMS<3.9 and Python<3.9
+chore: update to django 5.2 - drop Django 3, django CMS <3.11
