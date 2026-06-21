@@ -3,4 +3,5 @@ include CONTRIBUTING.rst
 include HISTORY.rst
 include LICENSE
 include README.rst
+include Makefile
 recursive-include djangocms_multisite *.html *.png *.gif *js *jpg *jpeg *svg *py *css *po *mo
